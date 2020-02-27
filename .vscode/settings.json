@@ -1,4 +1,0 @@
-{
-    "python.linting.pylintPath": "pylint-django",
-    "python.pythonPath": "/home/curious/.virtualenvs/drf-tutorial/bin/python"
-}
