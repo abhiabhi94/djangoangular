@@ -1,0 +1,11 @@
+
+# Don't track content of these folders
+
+# Binary python files
+*.py[c|o|d]
+
+# assets
+assets/**
+
+# media files
+media/**
