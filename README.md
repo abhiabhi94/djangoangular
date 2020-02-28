@@ -1,3 +1,3 @@
-### A project to practice the working of drf(django rest framework) and angular
+### A project to practice the working of drf(django rest framework) and vuejs
 
-This is a work in progress project.
+This project is a work in progress.
