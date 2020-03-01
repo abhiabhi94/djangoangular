@@ -1,0 +1,1 @@
+### A project to practice the tutorial from the official documentation on [VueJS](https://www.vuemastery.com/courses/intro-to-vue-js/)
