@@ -24,20 +24,20 @@ Vue.component('product', {
     },
     template: `
         <div class="product">
-                <img :src="image" alt="socks" class="productImage">
-                <div class="productInfo">
+                <img :src="image" alt="socks" class="product-image">
+                <div class="product-info">
                     <a :href="url">
                         <h1 class="productTitle">{{ title }}</h1>
                     </a>
-                    <h4 class="productDescription">{{ description }}</h4>
-                    <p v-if="stock > 10" class="productStock">On sale</p>
-                    <p v-else-if="stock <= 10 && stock > 0 " class="productStock">Almost sold!</p>
-                    <p v-else="stock" class="productStock" :style="styleObject">Out of stock</p>
-                    <div class="productDetails">
+                    <h4 class="product-description">{{ description }}</h4>
+                    <p v-if="stock > 10" class="product-stock">On sale</p>
+                    <p v-else-if="stock <= 10 && stock > 0 " class="product-stock">Almost sold!</p>
+                    <p v-else="stock" class="product-stock" :style="styleObject">Out of stock</p>
+                    <div class="product-details">
                         <p>Details</p>
                         <product-details :details="details"></product-details>
                     </div>
-                    <div class="productSizes">
+                    <div class="product-sizes">
                         <p>Available Sizes</p>
                         <ul>
                             <li v-for="size in sizes" :key="size.id">
@@ -45,15 +45,14 @@ Vue.component('product', {
                             </li>
                         </ul>
                     </div>
-                    <div class="productVariant" v-for="(variant, index) in variants" :key="variant.id">
-                        <div class="colorBox" :style="{ backgroundColor: variant.color }" @mouseover="updateImage(index)">
+                    <div class="product-variant" v-for="(variant, index) in variants" :key="variant.id">
+                        <div class="color-box" :style="{ backgroundColor: variant.color }" @mouseover="updateImage(index)">
                         </div>
                     </div>
-                    <p class="productShipping">Shipping: {{ shipping }}</p>
-                    <div class="productCart">
-                        <button class="increment" :class="{ disabledButton: !stock }" :disabled="!stock" @click="increment" :style="styleObject">Add to Cart</button>
-                        <p class="cart" :class="{ disabledButton: !stock }" :disabled="!stock" :style="styleObject"><b>Cart({{ cart }})</b></p>
-                        <button class="decrement" :class="{ disabledButton: !stock }" :disabled="!stock" @click="decrement" v-show="cart > 0" :style="styleObject">Remove from Cart</button>
+                    <p class="product-shipping">Shipping: {{ shipping }}</p>
+                    <div class="cart-options">
+                        <button class="increment-cart" :class="{ disabledButton: !stock }" :disabled="!stock" @click="incrementCart" :style="styleObject">Add to Cart</button>
+                        <button class="decrement-cart" :class="{ disabledButton: !stock }" :disabled="!stock" @click="decrementCart" :style="styleObject">Remove from Cart</button>
                     </div>
                 </div>
             </div>
@@ -95,15 +94,16 @@ Vue.component('product', {
                     val: "28 inch"
                 }
             ],
-            cart: 0
         }
     },
     methods: {
-        increment: function() {
-            this.cart += 1;
+        incrementCart: function() {
+            this.variants[this.selectedVariant].quantity -= 1;
+            this.$emit('update-cart', this.variants[this.selectedVariant].id, flag = 'add');
         },
-        decrement: function() {
-            this.cart -= 1;
+        decrementCart: function() {
+            this.variants[this.selectedVariant].quantity += 1;
+            this.$emit('update-cart', this.variants[this.selectedVariant].id, flag = 'remove');
         },
         updateImage: function(index) {
             this.selectedVariant = index;
@@ -116,6 +116,13 @@ Vue.component('product', {
         image() {
             return this.variants[this.selectedVariant].image;
         },
+        shipping() {
+            if (this.premium) {
+                return 'Free';
+            } else {
+                return 'Rs. 50';
+            }
+        },
         stock() {
             return this.variants[this.selectedVariant].quantity;
         },
@@ -125,13 +132,6 @@ Vue.component('product', {
                     'text-decoration': 'line-through'
                 }
             }
-        },
-        shipping() {
-            if (this.premium) {
-                return 'Free';
-            } else {
-                return 'Rs. 50';
-            }
         }
     }
 })
@@ -140,5 +140,20 @@ var app = new Vue({
     el: '#app',
     data: {
         premium: true,
+        cart: []
+    },
+    methods: {
+        updateCart: function(id, flag) {
+            if (flag === 'add') {
+                this.cart.push(id);
+            } else {
+                const index = this.cart.indexOf(id);
+                if (index > -1) {
+                    this.cart.splice(index, 1);
+                } else {
+                    window.alert('Item not present in the cart');
+                }
+            }
+        }
     }
 })

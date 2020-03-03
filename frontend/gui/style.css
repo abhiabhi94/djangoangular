@@ -21,7 +21,7 @@ button {
     font-size: 14px;
 }
 
-.navBar {
+.nav-bar {
     background: linear-gradient(-90deg, #84CF6A, #16C0B0);
     height: 60px;
     margin-bottom: 15px;
@@ -36,24 +36,42 @@ button {
     margin: 1rem;
 }
 
-.productImage {
+.product-image {
     flex-basis: 200px;
 }
 
-.productCart {
+.cart-options {
     display: inline-flex;
 }
 
-.productCart>* {
+.cart-options>* {
     margin-left: 1rem;
+}
+
+.cart {
+    position: fixed;
+    left: 90%;
+    top: 10%;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 1px solid #2f2f2f;
+}
+
+.cart p {
+    margin: 3px 5px;
 }
 
 .disabledButton {
     background-color: #b8b8b8;
 }
 
-.colorBox {
+.product-variant {
+    display: inline-flex;
+}
+
+.color-box {
     height: 40px;
     width: 40px;
     margin-top: 5px;
+    margin-left: 1rem;
 }
