@@ -8,7 +8,7 @@ img {
     border: 1px solid #d8d8d8;
     width: 70%;
     margin: 10px;
-    box-shadow: 0px .5px 1px #d8d8d8;
+    box-shadow: 0px .5px 1px #efefef;
 }
 
 button {
@@ -21,6 +21,24 @@ button {
     font-size: 14px;
 }
 
+textarea {
+    width: 90%;
+    height: 5rem;
+}
+
+fieldset {
+    padding: 1rem;
+}
+
+fieldset>* {
+    margin: 0.5rem;
+}
+
+.text-muted {
+    font-size: 0.8rem;
+    color: #666;
+}
+
 .nav-bar {
     background: linear-gradient(-90deg, #84CF6A, #16C0B0);
     height: 60px;
@@ -29,15 +47,16 @@ button {
 
 .product {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     padding: 1rem;
 }
 
-.product>* {
-    margin: 1rem;
-}
-
-.product-image {
-    flex-basis: 200px;
+.product-image,
+.product-info {
+    width: 50%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .cart-options {
@@ -74,4 +93,34 @@ button {
     width: 40px;
     margin-top: 5px;
     margin-left: 1rem;
+}
+
+.product-reviews {
+    width: 100%;
+    border: 2px solid #efefef;
+}
+
+.product-review-form {
+    width: 400px;
+    border: 2px solid #efefef;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.product-review-form>* {
+    margin: 0.5rem;
+}
+
+.error {
+    color: red;
+}
+
+.product-review {
+    border: 2px solid #efefef;
+    margin: 1rem;
+    padding: 0.5rem;
+}
+
+.review-message {
+    border: 2px solid #efefef;
 }
