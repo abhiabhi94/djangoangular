@@ -101,7 +101,7 @@ fieldset>* {
 }
 
 .product-review-form {
-    width: 400px;
+    width: 100%;
     border: 2px solid #efefef;
     padding: 1rem;
     margin: 1rem;
@@ -123,4 +123,30 @@ fieldset>* {
 
 .review-message {
     border: 2px solid #efefef;
+}
+
+.tabs {
+    border: thick double #efefef;
+}
+
+.product-tabs,
+.product-info-tabs {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    margin-left: 1.5rem;
+    cursor: pointer;
+}
+
+.activeTab {
+    color: #16C0B0;
+    text-decoration: underline;
+}
+
+.product-details,
+.product-shipping {
+    padding: 1rem;
 }

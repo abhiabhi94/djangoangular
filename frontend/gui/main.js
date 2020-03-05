@@ -1,17 +1,90 @@
-Vue.component('product-details', {
+var eventBus = new Vue()
+
+Vue.component('product-info-tabs', {
     props: {
+        shipping: {
+            type: String,
+            required: true
+        },
         details: {
             type: Array,
             required: true
         }
     },
     template: `
-        <ul>
-            <li v-for="detail in details">
-                {{ detail }}
-            </li>
-        </ul>
-    `
+    <div class="product-info-tabs">
+        <div class="tabs">
+            <span class="tab"
+                v-for="(tab, index) in tabs" 
+                :key="index"
+                @click="selectedTab=tab"
+                :class="{ activeTab: selectedTab === tab }"
+                >{{ tab }}</span>
+        </div>
+        <div v-show="selectedTab === 'Shipping'"
+            class="product-shipping">
+            <p>Shipping: {{ shipping }}</p>
+        </div>
+        <div v-show="selectedTab === 'Details'"
+            class="product-details">
+            <ul>
+                <li v-for="detail in details">
+                    {{ detail }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    `,
+    data() {
+        return {
+            tabs: ['Shipping', 'Details'],
+            selectedTab: 'Shipping'
+        }
+    }
+})
+
+Vue.component('product-tabs', {
+    props: {
+        reviews: {
+            type: Array,
+            required: true
+        }
+    },
+    template: `
+    <div class="product-tabs">
+        <div class="tabs">
+            <span class="tab"
+                v-for="(tab, index) in tabs" 
+                :key="index"
+                @click="selectedTab=tab"
+                :class="{ activeTab: selectedTab === tab }"
+                >{{ tab }}</span>
+        </div>
+        <div v-show="selectedTab === 'Reviews'" class="product-reviews">
+            <p v-if="!reviews.length">There are no reviews here</p>
+            <div>
+                <div class="product-review" v-for="review in reviews">
+                    <p><span class="text-muted">Name:</span> {{ review.name }}</p>
+                    <p><span class="text-muted">Rating:</span> {{ review.rating }}</p>
+                    <p class="review-message"><span class="text-muted">Review:</span> {{ review.review }}</p>
+                    <p class="review-choice"
+                        v-if="review.recommendationChoice"><span class="text-muted">Recommendation Choice:</span>Yes</p>
+                    <p class="review-choice"
+                        v-else><span class="text-muted">Recommendation Choice:</span>No</p>
+                </div>
+            </div>
+        </div>
+        <div v-show="selectedTab === 'Make a Review'">
+            <product-review></product-review>
+        </div>
+    </div>
+    `,
+    data() {
+        return {
+            tabs: ['Reviews', 'Make a Review'],
+            selectedTab: 'Reviews'
+        }
+    }
 })
 
 Vue.component('product-review', {
@@ -26,15 +99,22 @@ Vue.component('product-review', {
         <fieldset>
             <div class="review-name">
                 <label for="name">Name:</label>
-                <input type="text" name="name" value="name" v-model="name">
+                <input type="text" name="name"
+                value="name"
+                v-model="name">
             </div>
             <div class="review-review">
-                <label for="review">Review:</label>
-                <textarea name="review" value="review" v-model="review"></textarea>
+                <label>Review:
+                    <textarea name="review"
+                        value="review"
+                        v-model="review"></textarea>
+                </label>
             </div>
             <div class="review-rating">
                 <label for="rating"> Rating:</label>
-                <select name="rating" id="rating" v-model.number="rating">
+                <select name="rating"
+                    id="rating"
+                    v-model.number="rating">
                     <option value="5">5</option>
                     <option value="4">4</option>
                     <option value="3">3</option>
@@ -45,10 +125,14 @@ Vue.component('product-review', {
             <div class="recommendation-choice">
                 <p>Would you recommend this product?</p>
                 <label>Yes
-                    <input type="radio" name="yes" id="recommendation-yes" value="yes"  v-model.boolean="recommendationChoice">
+                    <input type="radio" name="yes"
+                        id="recommendation-yes" value="yes"
+                        v-model.boolean="recommendationChoice">
                 </label>
                 <label>No
-                    <input type="radio" name="no" id="recommendation-no" value="no"  v-model.boolean="recommendationChoice">
+                    <input type="radio" name="no"
+                    id="recommendation-no" value="no"
+                    v-model.boolean="recommendationChoice">
                 </label>
             </div>
             <p>
@@ -75,7 +159,7 @@ Vue.component('product-review', {
                     rating: this.rating,
                     recommendationChoice: this.recommendationChoice === 'yes' ? true : false
                 };
-                this.$emit('review-submitted', productReview);
+                eventBus.$emit('review-submitted', productReview);
                 this.name = null;
                 this.review = null;
                 this.rating = null;
@@ -101,7 +185,7 @@ Vue.component('product', {
     template: `
         <div class="product">
             <div class="product-image">
-                <img :src="image" alt="{{ title }}">
+                <img :src="image" :alt="title">
             </div>
             <div class="product-info">
                 <a :href="url">
@@ -109,12 +193,11 @@ Vue.component('product', {
                 </a>
                 <h4 class="product-description">{{ description }}</h4>
                 <p v-if="stock > 10" class="product-stock">On sale</p>
-                <p v-else-if="stock <= 10 && stock > 0 " class="product-stock">Almost sold!</p>
-                <p v-else="stock" class="product-stock" :style="styleObject">Out of stock</p>
-                <div class="product-details">
-                    <p>Details</p>
-                    <product-details :details="details"></product-details>
-                </div>
+                <p v-else-if="stock <= 10 && stock > 0"
+                    class="product-stock">Almost sold!</p>
+                <p v-else="stock"
+                    class="product-stock"
+                    :style="styleObject">Out of stock</p>
                 <div class="product-sizes">
                     <p>Available Sizes</p>
                     <ul>
@@ -123,30 +206,29 @@ Vue.component('product', {
                         </li>
                     </ul>
                 </div>
-                <div class="product-variant" v-for="(variant, index) in variants" :key="variant.id">
-                    <div class="color-box" :style="{ backgroundColor: variant.color }" @mouseover="updateImage(index)">
+                <div class="product-variant"
+                    v-for="(variant, index) in variants"
+                    :key="variant.id">
+                    <div class="color-box"
+                        :style="{ backgroundColor: variant.color }"
+                        @mouseover="updateImage(index)">
                     </div>
                 </div>
-                <p class="product-shipping">Shipping: {{ shipping }}</p>
+                <product-info-tabs :shipping="shipping" :details="details"></product-info-tabs>
                 <div class="cart-options">
-                    <button class="increment-cart" :class="{ disabledButton: !stock }" :disabled="!stock" @click="incrementCart" :style="styleObject">Add to Cart</button>
-                    <button class="decrement-cart" :class="{ disabledButton: !stock }" :disabled="!stock" @click="decrementCart" :style="styleObject">Remove from Cart</button>
+                    <button class="increment-cart"
+                        :class="{ disabledButton: !stock }"
+                        :disabled="!stock"
+                        @click="incrementCart"
+                        :style="styleObject">Add to Cart</button>
+                    <button class="decrement-cart"
+                        :class="{ disabledButton: !stock }"
+                        :disabled="!stock"
+                        @click="decrementCart"
+                        :style="styleObject">Remove from Cart</button>
                 </div>
             </div>
-            <div class="product-reviews">
-                <h3>Product Reviews</h3>
-                <p v-if="!reviews.length">There are no reviews here</p>
-                <div>
-                    <div class="product-review" v-for="review in reviews">
-                        <p><span class="text-muted">Name:</span> {{ review.name }}</p>
-                        <p><span class="text-muted">Rating:</span> {{ review.rating }}</p>
-                        <p class="review-message"><span class="text-muted">Review:</span> {{ review.review }}</p>
-                        <p class="review-choice" v-if="review.recommendationChoice"><span class="text-muted">Recommendation Choice:</span>Yes</p>
-                        <p class="review-choice" v-else><span class="text-muted">Recommendation Choice:</span>No</p>
-                    </div>
-                </div>
-            </div>
-                <product-review @review-submitted="addReview"></product-review>
+                <product-tabs :reviews="reviews"></product-tabs>
             </div>
     `,
     data() {
@@ -200,9 +282,6 @@ Vue.component('product', {
         },
         updateImage: function(index) {
             this.selectedVariant = index;
-        },
-        addReview: function(review) {
-            this.reviews.push(review);
         }
     },
     computed: {
@@ -229,6 +308,11 @@ Vue.component('product', {
                 }
             }
         }
+    },
+    mounted() {
+        eventBus.$on('review-submitted', productReview => {
+            this.reviews.push(productReview);
+        })
     }
 })
 
