@@ -1,1 +1,0 @@
-### A project to practice the tutorial from the official documentation on [django rest framework](https://www.django-rest-framework.org/tutorial/1-serialization/)
