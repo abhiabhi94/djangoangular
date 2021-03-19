@@ -1,7 +1,7 @@
 asgiref==3.2.3
 autopep8==1.5
 Django==3.0.3
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 pkg-resources==0.0.0
 pycodestyle==2.5.0
 Pygments==2.5.2
