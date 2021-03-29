@@ -4,7 +4,7 @@ Django==3.0.3
 djangorestframework==3.11.0
 pkg-resources==0.0.0
 pycodestyle==2.5.0
-Pygments==2.5.2
+Pygments==2.7.4
 pylint-django==2.0.14
 pylint-plugin-utils==0.6
 pytz==2019.3
